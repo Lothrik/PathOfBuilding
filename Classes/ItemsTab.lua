@@ -512,6 +512,13 @@ If there's 2 slots an item can go in, holding Shift will put it in the second.]]
 					if mod.modTags and #mod.modTags > 0 then
 						tooltip:AddLine(16, "Tags: "..table.concat(mod.modTags, ', '))
 					end
+					if mod.weightKey ~= nil then
+						tooltip:AddSeparator(10)
+						tooltip:AddLine(16, "^7Weights:")
+						for i, weightKey in ipairs(mod.weightKey) do
+							tooltip:AddLine(14, "{right}^8"..weightKey..": ^7"..mod.weightVal[i])
+						end
+					end
 				else
 					tooltip:AddLine(16, "^7"..#modList.." Tiers")
 					local minMod = self.displayItem.affixes[modList[1]]
