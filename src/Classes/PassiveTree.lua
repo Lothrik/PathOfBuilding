@@ -131,6 +131,7 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 			-- Migrate to old format
 			class.classes = class.ascendancies
 		end
+		class.classes = class.classes or { }
 		class.classes[0] = { name = "None" }
 		self.classNameMap[class.name] = classId
 		for ascendClassId, ascendClass in pairs(class.classes) do
@@ -420,7 +421,8 @@ local PassiveTreeClass = newClass("PassiveTree", function(self, treeVersion)
 	end
 
 	for classId, class in pairs(self.classes) do
-		local startNode = nodeMap[class.startNodeId]
+		local startNode = nodeMap[class.startNodeId] or { }
+		startNode.linkedId = startNode.linkedId or { }
 		for _, nodeId in ipairs(startNode.linkedId) do
 			local node = nodeMap[nodeId]
 			if node.type == "Normal" then

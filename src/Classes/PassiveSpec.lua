@@ -383,7 +383,8 @@ end
 function PassiveSpecClass:SelectClass(classId)
 	if self.curClassId then
 		-- Deallocate the current class's starting node
-		local oldStartNodeId = self.curClass.startNodeId
+		local oldStartNodeId = self.curClass.startNodeId or 0
+		self.nodes[oldStartNodeId] = self.nodes[oldStartNodeId] or { }
 		self.nodes[oldStartNodeId].alloc = false
 		self.allocNodes[oldStartNodeId] = nil
 	end
@@ -395,7 +396,9 @@ function PassiveSpecClass:SelectClass(classId)
 
 	-- Allocate the new class's starting node
 	local startNode = self.nodes[class.startNodeId]
+	startNode = startNode or { }
 	startNode.alloc = true
+	startNode.id = startNode.id or 0
 	self.allocNodes[startNode.id] = startNode
 
 	-- Reset the ascendancy class
@@ -501,6 +504,7 @@ end
 
 function PassiveSpecClass:DeallocSingleNode(node)
 	node.alloc = false
+	self.allocNodes = self.allocNodes or { }
 	self.allocNodes[node.id] = nil
 	if node.type == "Mastery" then
 		self:AddMasteryEffectOptionsToNode(node)
@@ -809,6 +813,7 @@ function PassiveSpecClass:BuildAllDependsAndPaths()
 	for id, node in pairs(self.allocNodes) do
 		node.visited = true
 		local anyStartFound = (node.type == "ClassStart" or node.type == "AscendClassStart")
+		node.linked = node.linked or { }
 		for _, other in ipairs(node.linked) do
 			if other.alloc and not isValueInArray(node.depends, other) then
 				-- The other node is allocated and isn't already dependent on this node, so try and find a path to a start node through it
@@ -865,6 +870,7 @@ function PassiveSpecClass:BuildAllDependsAndPaths()
 		if not anyStartFound then
 			-- No start nodes were found through ANY nodes
 			-- Therefore this node and all nodes depending on it are orphans and should be pruned
+			node.depends = node.depends or { }
 			for _, depNode in ipairs(node.depends) do
 				local prune = true
 				for nodeId, itemId in pairs(self.jewels) do

@@ -176,6 +176,8 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 	local offsetX = self.zoomX + viewPort.x + viewPort.width/2
 	local offsetY = self.zoomY + viewPort.y + viewPort.height/2
 	local function treeToScreen(x, y)
+		x = x or 0
+		y = y or 0
 		return x * scale + offsetX,
 		       y * scale + offsetY
 	end
@@ -534,6 +536,9 @@ function PassiveTreeViewClass:Draw(build, viewPort, inputEvents)
 				SetDrawLayer(nil, 15)
 			else
 				-- Normal node (includes keystones and notables)
+				node.type = node.type or ""
+				node.sprites = node.sprites or { }
+				node.overlay = node.overlay or { }
 				base = node.sprites[node.type:lower()..(isAlloc and "Active" or "Inactive")]
 				overlay = node.overlay[state .. (node.ascendancyName and "Ascend" or "") .. (node.isBlighted and "Blighted" or "")]
 			end

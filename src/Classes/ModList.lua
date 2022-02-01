@@ -59,6 +59,7 @@ function ModListClass:MergeMod(mod)
 end
 
 function ModListClass:AddList(modList)
+	modList = modList or { }
 	for i = 1, #modList do
 		t_insert(self, modList[i])
 	end

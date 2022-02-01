@@ -135,6 +135,8 @@ data.skillColorMap = { colorCodes.STRENGTH, colorCodes.DEXTERITY, colorCodes.INT
 
 data.setJewelRadiiGlobally = function(treeVersion)
 	local major, minor = treeVersion:match("(%d+)_(%d+)")
+	major = major or math.huge
+	minor = minor or math.huge
 	if tonumber(major) <= 3 and tonumber(minor) <= 15 then
 		data.jewelRadius = data.jewelRadii["3_15"]
 	else

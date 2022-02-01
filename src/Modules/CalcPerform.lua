@@ -2796,6 +2796,8 @@ function calcs.perform(env, avoidCache)
 	end
 
 	local major, minor = env.spec.treeVersion:match("(%d+)_(%d+)")
+	major = major or math.huge
+	minor = minor or math.huge
 
 	-- Apply exposures
 	for _, element in ipairs({"Fire", "Cold", "Lightning"}) do
